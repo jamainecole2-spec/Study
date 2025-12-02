@@ -62,7 +62,7 @@ export default function Login() {
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-6">
             <h1 className="text-4xl font-bold text-gray-900">
-              {isLogin ? "Login" : "Sign Up"}
+              {isLogin ? "Log in" : "Sign Up"}
             </h1>
             <span className="text-gray-400 text-lg">or</span>
             <button
@@ -159,10 +159,9 @@ export default function Login() {
           {/* Login Button */}
           <Button
             onClick={handleLogin}
-            disabled={recordLoginMutation.isPending}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg text-lg transition disabled:opacity-50"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg text-lg transition"
           >
-            {recordLoginMutation.isPending ? "Processing..." : "LOGIN"}
+            LOGIN
           </Button>
 
           {/* Divider */}
