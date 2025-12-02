@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { X } from "lucide-react";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,12 +17,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Close button */}
-        <div className="flex justify-end mb-8">
-          <button className="text-gray-400 hover:text-gray-600 transition">
-            <X size={28} />
-          </button>
-        </div>
+
 
         {/* Header */}
         <div className="mb-8">
@@ -107,12 +102,12 @@ export default function Login() {
                 Remember me
               </label>
             </div>
-            <a
-              href="#"
-              className="text-sm font-medium text-blue-500 hover:text-blue-600 transition"
+            <button
+              className="text-sm font-medium text-blue-500 hover:text-blue-600 transition cursor-pointer"
+              disabled
             >
               I forgot my password
-            </a>
+            </button>
           </div>
 
           {/* Login Button */}
@@ -133,7 +128,7 @@ export default function Login() {
           {/* Social Login Buttons */}
           <div className="space-y-3">
             {/* Google Button */}
-            <button className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+            <button className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition" disabled>
               <svg
                 className="w-5 h-5"
                 viewBox="0 0 24 24"
@@ -148,7 +143,7 @@ export default function Login() {
             </button>
 
             {/* Facebook Button */}
-            <button className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+            <button className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition" disabled>
               <svg
                 className="w-5 h-5"
                 fill="currentColor"
@@ -164,8 +159,8 @@ export default function Login() {
           <div className="text-center mt-6">
             <span className="text-gray-700">Don't have an account? </span>
             <button
-              onClick={() => setIsLogin(false)}
-              className="text-blue-500 hover:text-blue-600 font-medium transition"
+              className="text-blue-500 hover:text-blue-600 font-medium transition cursor-pointer"
+              disabled
             >
               Sign Up
             </button>
