@@ -1,23 +1,4 @@
 {
   "buildCommand": "vite build && esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-  "outputDirectory": "dist",
-  "framework": "vite",
-  "env": [
-    "DATABASE_URL",
-    "GMAIL_USER",
-    "GMAIL_APP_PASSWORD",
-    "JWT_SECRET",
-    "OAUTH_SERVER_URL",
-    "OWNER_NAME",
-    "OWNER_OPEN_ID",
-    "VITE_APP_ID",
-    "VITE_APP_TITLE",
-    "VITE_ANALYTICS_ENDPOINT",
-    "VITE_ANALYTICS_WEBSITE_ID",
-    "VITE_FRONTEND_FORGE_API_KEY",
-    "VITE_FRONTEND_FORGE_API_URL",
-    "VITE_OAUTH_PORTAL_URL",
-    "BUILT_IN_FORGE_API_KEY",
-    "BUILT_IN_FORGE_API_URL"
-  ]
+  "outputDirectory": "dist"
 }
