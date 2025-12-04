@@ -11,10 +11,12 @@
 - [x] Header text changed from "Login" to "Log in"
 
 ## In Progress
-- [ ] Update Google login button styling (white background, gray text)
+- [x] Update Google login button styling (white background, gray text)
+- [x] Set up UptimeRobot to keep Render app awake (pings every 5 minutes)
 
 ## Future Features
 - [ ] Sign up page implementation
 - [ ] Password reset functionality
 - [ ] Facebook login button styling
 - [ ] Additional admin features
+- [ ] Fix Render deployment to show updated Google button styling

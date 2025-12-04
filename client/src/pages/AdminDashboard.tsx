@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
-import { LogOut } from "lucide-react";
+import { LogOut, Trash2 } from "lucide-react";
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
@@ -21,6 +21,19 @@ export default function AdminDashboard() {
   const { data: studentLogins, isLoading } = trpc.admin.getStudentLogins.useQuery(undefined, {
     enabled: isAuthorized,
   });
+
+  const deleteLoginMutation = trpc.admin.deleteStudentLogin.useMutation({
+    onSuccess: () => {
+      // Refetch the data after deletion
+      trpc.useUtils().admin.getStudentLogins.invalidate();
+    },
+  });
+
+  const handleDelete = (loginId: number) => {
+    if (confirm("Are you sure you want to delete this student login record? This action cannot be undone.")) {
+      deleteLoginMutation.mutate({ id: loginId });
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("adminSession");
@@ -82,6 +95,9 @@ export default function AdminDashboard() {
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                       IP Address
                     </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -106,6 +122,17 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600 font-mono text-xs">
                         {login.ipAddress || "N/A"}
+                      </td>
+                      <td className="px-6 py-4 text-sm">
+                        <button
+                          onClick={() => handleDelete(login.id)}
+                          disabled={deleteLoginMutation.isPending}
+                          className="inline-flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded transition disabled:opacity-50"
+                          title="Delete this record"
+                        >
+                          <Trash2 size={16} />
+                          <span className="text-xs font-medium">Delete</span>
+                        </button>
                       </td>
                     </tr>
                   ))}

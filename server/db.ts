@@ -119,3 +119,18 @@ export async function getAllStudentLogins() {
     return [];
   }
 }
+
+export async function deleteStudentLogin(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot delete student login: database not available");
+    return;
+  }
+
+  try {
+    await db.delete(studentLogins).where(eq(studentLogins.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to delete student login:", error);
+    throw error;
+  }
+}

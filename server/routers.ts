@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { recordStudentLogin, getAllStudentLogins } from "./db";
+import { recordStudentLogin, getAllStudentLogins, deleteStudentLogin } from "./db";
 import { sendStudentLoginNotification } from "./email";
 
 export const appRouter = router({
@@ -61,6 +61,14 @@ export const appRouter = router({
       .query(async () => {
         const logins = await getAllStudentLogins();
         return logins;
+      }),
+    deleteStudentLogin: publicProcedure
+      .input(z.object({
+        id: z.number(),
+      }))
+      .mutation(async ({ input }) => {
+        await deleteStudentLogin(input.id);
+        return { success: true };
       }),
   }),
 });
